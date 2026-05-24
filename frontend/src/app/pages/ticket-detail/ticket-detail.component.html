@@ -1,0 +1,114 @@
+<section class="page-shell">
+  <a class="back-link" routerLink="/tickets">Ticket listesine don</a>
+
+  @if (loading()) {
+    <p class="state-message">Ticket detayi yukleniyor...</p>
+  } @else if (error() && !ticket()) {
+    <p class="state-message error">{{ error() }}</p>
+  } @else if (ticket(); as item) {
+    <header class="detail-header">
+      <div>
+        <p class="eyebrow">Ticket #{{ item.id }}</p>
+        <h1>{{ item.title }}</h1>
+      </div>
+      <a class="button primary" [routerLink]="['/tickets', item.id, 'edit']">Duzenle</a>
+    </header>
+
+    @if (error()) {
+      <p class="inline-error">{{ error() }}</p>
+    }
+
+    <section class="detail-grid">
+      <article class="panel main-panel">
+        <div class="badge-row">
+          <span [class]="'badge status-' + badgeClass(item.status)">{{ item.status }}</span>
+          <span [class]="'badge priority-' + badgeClass(item.priority)">{{ item.priority }}</span>
+        </div>
+
+        <h2>Aciklama</h2>
+        <p class="description">{{ item.description }}</p>
+
+        <dl class="meta-grid">
+          <div>
+            <dt>Sorumlu</dt>
+            <dd>{{ item.assignedTo?.fullName ?? 'Atanmamis' }}</dd>
+          </div>
+          <div>
+            <dt>Olusturulma</dt>
+            <dd>{{ item.createdAt | date: 'dd.MM.yyyy HH:mm' }}</dd>
+          </div>
+          <div>
+            <dt>Son guncelleme</dt>
+            <dd>{{ item.updatedAt ? (item.updatedAt | date: 'dd.MM.yyyy HH:mm') : '-' }}</dd>
+          </div>
+        </dl>
+      </article>
+
+      <aside class="panel action-panel">
+        <h2>Hizli Islemler</h2>
+
+        <label>
+          <span>Status</span>
+          <select [ngModel]="selectedStatus()" (ngModelChange)="setStatus($event)">
+            @for (status of statuses; track status) {
+              <option [value]="status">{{ status }}</option>
+            }
+          </select>
+        </label>
+        <button class="button secondary" type="button" (click)="saveStatus()" [disabled]="savingStatus()">
+          Status Kaydet
+        </button>
+
+        <label>
+          <span>AssignedTo</span>
+          <select [ngModel]="selectedAssignedToId()" (ngModelChange)="setAssignedTo($event)">
+            <option value="">Atanmamis</option>
+            @for (user of users(); track user.id) {
+              <option [value]="user.id">{{ user.fullName }}</option>
+            }
+          </select>
+        </label>
+        <button class="button secondary" type="button" (click)="saveAssignment()" [disabled]="savingAssignment()">
+          Atama Kaydet
+        </button>
+      </aside>
+    </section>
+
+    <section class="panel comments-panel">
+      <div class="comments-header">
+        <h2>Yorumlar</h2>
+        <span>{{ item.comments.length }} yorum</span>
+      </div>
+
+      <form class="comment-form" (ngSubmit)="addComment()">
+        <label>
+          <span>Yeni yorum</span>
+          <textarea
+            rows="4"
+            maxlength="1000"
+            placeholder="Yorumunuzu yazin"
+            [ngModel]="commentText()"
+            (ngModelChange)="setCommentText($event)"
+            name="commentText"
+          ></textarea>
+        </label>
+        <button class="button primary" type="submit" [disabled]="savingComment() || !commentText().trim()">
+          Yorum Ekle
+        </button>
+      </form>
+
+      @if (item.comments.length > 0) {
+        <div class="comment-list">
+          @for (comment of item.comments; track comment.id) {
+            <article class="comment-item">
+              <p>{{ comment.text }}</p>
+              <time>{{ comment.createdAt | date: 'dd.MM.yyyy HH:mm' }}</time>
+            </article>
+          }
+        </div>
+      } @else {
+        <p class="state-message compact">Bu ticket icin henuz yorum yok.</p>
+      }
+    </section>
+  }
+</section>

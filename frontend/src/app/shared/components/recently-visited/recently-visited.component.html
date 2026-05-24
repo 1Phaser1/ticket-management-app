@@ -1,0 +1,13 @@
+@if (pages().length > 0) {
+  <aside class="recent-panel" aria-label="Son gezilen sayfalar">
+    <h2>Son Gezdiklerim</h2>
+    <nav>
+      @for (page of pages(); track page.url) {
+        <a [routerLink]="page.url">
+          <span>{{ page.title }}</span>
+          <time>{{ page.visitedAt | date: 'HH:mm' }}</time>
+        </a>
+      }
+    </nav>
+  </aside>
+}

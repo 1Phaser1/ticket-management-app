@@ -1,0 +1,23 @@
+<div class="app-shell">
+  <header class="app-header">
+    <a class="brand" routerLink="/tickets">
+      <span class="brand-mark">TM</span>
+      <span>Ticket Management</span>
+    </a>
+
+    <nav aria-label="Ana navigasyon">
+      <a routerLink="/tickets" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        Tickets
+      </a>
+      <a routerLink="/tickets/new" routerLinkActive="active">
+        Yeni Ticket
+      </a>
+    </nav>
+  </header>
+
+  <main>
+    <router-outlet />
+  </main>
+
+  <app-recently-visited />
+</div>

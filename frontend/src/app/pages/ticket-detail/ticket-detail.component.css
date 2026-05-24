@@ -1,0 +1,160 @@
+.back-link {
+  display: inline-flex;
+  margin-bottom: 16px;
+  color: var(--accent-color);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.detail-header {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.detail-header h1 {
+  margin: 0;
+  color: var(--heading-color);
+  font-size: clamp(1.7rem, 4vw, 2.45rem);
+  line-height: 1.1;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 18px;
+  align-items: start;
+}
+
+.panel {
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--surface-color);
+  box-shadow: 0 10px 28px rgb(15 23 42 / 6%);
+}
+
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.main-panel h2,
+.action-panel h2,
+.comments-panel h2 {
+  margin: 0 0 12px;
+  color: var(--heading-color);
+  font-size: 1rem;
+}
+
+.description {
+  margin: 0 0 22px;
+  color: var(--text-color);
+  line-height: 1.7;
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.meta-grid div {
+  display: grid;
+  gap: 4px;
+}
+
+.meta-grid dt {
+  color: var(--subtle-color);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.meta-grid dd {
+  margin: 0;
+}
+
+.action-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.action-panel label,
+.comment-form label {
+  display: grid;
+  gap: 7px;
+}
+
+.comments-panel {
+  margin-top: 18px;
+}
+
+.comments-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.comments-header span {
+  color: var(--subtle-color);
+  font-size: 0.9rem;
+}
+
+.comment-form {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.comment-form .button {
+  justify-self: start;
+}
+
+.comment-list {
+  display: grid;
+  gap: 10px;
+}
+
+.comment-item {
+  padding: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--muted-color);
+}
+
+.comment-item p {
+  margin: 0 0 8px;
+}
+
+.comment-item time {
+  color: var(--subtle-color);
+  font-size: 0.85rem;
+}
+
+.inline-error {
+  margin: 0 0 14px;
+  color: var(--danger-color);
+  font-weight: 700;
+}
+
+.compact {
+  padding: 16px 0 0;
+}
+
+@media (max-width: 860px) {
+  .detail-grid,
+  .meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-header {
+    flex-direction: column;
+  }
+}

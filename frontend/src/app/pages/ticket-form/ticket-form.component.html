@@ -1,0 +1,81 @@
+<section class="page-shell narrow">
+  <a class="back-link" routerLink="/tickets">Ticket listesine don</a>
+
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">{{ isEditMode() ? 'Ticket guncelle' : 'Yeni talep' }}</p>
+      <h1>{{ isEditMode() ? 'Ticket Duzenle' : 'Ticket Olustur' }}</h1>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <p class="state-message">Form verileri yukleniyor...</p>
+  } @else {
+    @if (error()) {
+      <p class="state-message error">{{ error() }}</p>
+    }
+
+    <form class="ticket-form" #ticketForm="ngForm" (ngSubmit)="save(ticketForm)">
+      <label>
+        <span>Title</span>
+        <input
+          type="text"
+          name="title"
+          required
+          maxlength="150"
+          [(ngModel)]="form.title"
+          placeholder="Kisa ve net bir baslik"
+        />
+      </label>
+
+      <label>
+        <span>Description</span>
+        <textarea
+          name="description"
+          required
+          maxlength="1000"
+          rows="7"
+          [(ngModel)]="form.description"
+          placeholder="Talebin detaylarini yazin"
+        ></textarea>
+      </label>
+
+      <div class="form-grid">
+        <label>
+          <span>Priority</span>
+          <select name="priority" required [(ngModel)]="form.priority">
+            @for (priority of priorities; track priority) {
+              <option [value]="priority">{{ priority }}</option>
+            }
+          </select>
+        </label>
+
+        <label>
+          <span>Status</span>
+          <select name="status" required [(ngModel)]="form.status">
+            @for (status of statuses; track status) {
+              <option [value]="status">{{ status }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <label>
+        <span>AssignedTo</span>
+        <select name="assignedToId" [(ngModel)]="form.assignedToId">
+          <option [ngValue]="null">Atanmamis</option>
+          @for (user of users(); track user.id) {
+            <option [ngValue]="user.id">{{ user.fullName }}</option>
+          }
+        </select>
+      </label>
+
+      <div class="form-actions">
+        <button class="button primary" type="submit" [disabled]="saving() || ticketForm.invalid">
+          Kaydet
+        </button>
+        <a class="button ghost" routerLink="/tickets">Vazgec</a>
+      </div>
+    </form>
+  }
+</section>

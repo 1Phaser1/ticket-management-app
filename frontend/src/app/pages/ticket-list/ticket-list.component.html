@@ -1,0 +1,82 @@
+<section class="page-shell">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Talep yonetimi</p>
+      <h1>Ticket Listesi</h1>
+    </div>
+    <a class="button primary" routerLink="/tickets/new">Yeni Ticket Oluştur</a>
+  </header>
+
+  <section class="toolbar" aria-label="Ticket filtreleri">
+    <label>
+      <span>Arama</span>
+      <input
+        type="search"
+        placeholder="Baslik, durum, oncelik veya kisi ara"
+        [ngModel]="searchTerm()"
+        (ngModelChange)="setSearchTerm($event)"
+      />
+    </label>
+
+    <label>
+      <span>Status</span>
+      <select [ngModel]="statusFilter()" (ngModelChange)="setStatusFilter($event)">
+        <option value="">Tum statusler</option>
+        @for (status of statuses; track status) {
+          <option [value]="status">{{ status }}</option>
+        }
+      </select>
+    </label>
+
+    <label>
+      <span>AssignedTo</span>
+      <select [ngModel]="assignedToFilter()" (ngModelChange)="setAssignedToFilter($event)">
+        <option value="">Tum kullanicilar</option>
+        <option value="unassigned">Atanmamis</option>
+        @for (user of users(); track user.id) {
+          <option [value]="user.id">{{ user.fullName }}</option>
+        }
+      </select>
+    </label>
+  </section>
+
+  @if (loading()) {
+    <p class="state-message">Ticketlar yukleniyor...</p>
+  } @else if (error()) {
+    <p class="state-message error">{{ error() }}</p>
+  } @else {
+    <div class="result-count">
+      {{ filteredTickets().length }} ticket listeleniyor
+    </div>
+
+    @if (filteredTickets().length > 0) {
+      <div class="ticket-grid">
+        @for (ticket of filteredTickets(); track ticket.id) {
+          <article class="ticket-card">
+            <div class="ticket-card-top">
+              <span [class]="'badge status-' + badgeClass(ticket.status)">{{ ticket.status }}</span>
+              <span [class]="'badge priority-' + badgeClass(ticket.priority)">{{ ticket.priority }}</span>
+            </div>
+
+            <h2>{{ ticket.title }}</h2>
+
+            <dl>
+              <div>
+                <dt>Sorumlu</dt>
+                <dd>{{ ticket.assignedToFullName ?? 'Atanmamis' }}</dd>
+              </div>
+              <div>
+                <dt>Olusturulma</dt>
+                <dd>{{ ticket.createdAt | date: 'dd.MM.yyyy HH:mm' }}</dd>
+              </div>
+            </dl>
+
+            <a class="button ghost" [routerLink]="['/tickets', ticket.id]">Detay</a>
+          </article>
+        }
+      </div>
+    } @else {
+      <p class="state-message">Filtrelere uygun ticket bulunamadi.</p>
+    }
+  }
+</section>
