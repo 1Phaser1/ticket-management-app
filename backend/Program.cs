@@ -7,8 +7,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var connectionString = Environment.GetEnvironmentVariable("TICKET_DB_CONNECTION")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
+        "Database connection string is not configured. Set TICKET_DB_CONNECTION environment variable or ConnectionStrings:DefaultConnection.");
+}
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddCors(options =>
 {

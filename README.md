@@ -97,19 +97,37 @@ cd ..\frontend
 npm install
 ```
 
-## PostgreSQL Ayarlari
+## Guvenli Yapilandirma
 
-Backend connection string `backend/appsettings.json` icindedir:
+Gercek secret bilgileri, veritabani sifreleri ve production connection string degerleri GitHub'a gonderilmemelidir. Bu nedenle `backend/appsettings.json` icindeki connection string alani bos tutulur:
 
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Host=localhost;Port=5432;Database=ticket_management_db;Username=postgres;"
+    "DefaultConnection": ""
   }
 }
 ```
 
-PostgreSQL kullaniciniz parola istiyorsa connection string'e `Password=parolaniz;` alanini ekleyin.
+Backend calisirken connection string once `TICKET_DB_CONNECTION` environment variable degerinden okunur. Bu deger yoksa `ConnectionStrings:DefaultConnection` fallback olarak kontrol edilir. Ikisi de bos ise uygulama anlasilir bir hata firlatir.
+
+Local ortamda environment variable PowerShell ile su sekilde tanimlanabilir:
+
+```powershell
+$env:TICKET_DB_CONNECTION="Host=localhost;Port=5432;Database=ticket_management_db;Username=postgres;Password=your_password"
+```
+
+Ornek connection string degeri [.env.example](.env.example) dosyasinda verilmiştir:
+
+```text
+TICKET_DB_CONNECTION=Host=localhost;Port=5432;Database=ticket_management_db;Username=postgres;Password=your_password
+```
+
+`.env`, `*.env` ve `backend/appsettings.Development.json` dosyalari root `.gitignore` icinde ignore edilir. Frontend API URL gizli bilgi degildir; tarayici tarafinda calistigi icin kullanici tarafindan gorulebilir.
+
+## PostgreSQL Ayarlari
+
+PostgreSQL tarafinda `ticket_management_db` adli veritabani olusturulmalidir. Backend bu veritabanina `TICKET_DB_CONNECTION` environment variable ile baglanir.
 
 ## Migration Komutlari
 
